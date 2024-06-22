@@ -2,11 +2,11 @@ package org.veenron.sports.permon.athlete;
 
 
 public enum AthleteStatus {
-    Active("Active"),
-    AwaitConfirmation("AwaitConfirmation"),
-    Blocked("Blocked"),
-    Suspended("Suspended"),
-    Closed("Closed");
+    Active("ACTV"),
+    Pending("PNDG"),
+    Blocked("BLCK"),
+    Suspended("SPND"),
+    Closed("ClSD");
 
     private final String code;
 

@@ -1,68 +1,104 @@
 package org.veenron.sports.permon.athlete.internal;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.veenron.sports.permon.athlete.Athlete;
+import org.veenron.sports.permon.athlete.AthleteRepository;
 import org.veenron.sports.permon.athlete.AthleteService;
 import org.veenron.sports.permon.athlete.AthleteStatus;
 import org.veenron.sports.permon.general.ShortUUID;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+@RequiredArgsConstructor
+@Service
 public class AthleteServiceImpl implements AthleteService {
+
+    final AthleteRepository repository;
+
     @Override
-    public Athlete createAthlete(String name, String email) {
+
+    public Optional<Athlete> createAthlete(String name, String email) {
         var now = LocalDateTime.now();
-        var athlete = new Athlete(0, ShortUUID.next(), name, email, AthleteStatus.Active, now, now);
-        return null;
+        return Optional.of(repository.save(new Athlete(0, ShortUUID.next(), name, email, AthleteStatus.Pending, now, now)));
     }
 
     @Override
-    public Athlete updateAthlete(String uid, Athlete updatedAtlete) {
-        return null;
+    public Optional<Athlete> updateAthlete(Athlete original, Athlete updatedAthlete) {
+        Athlete result = Athlete.builder()
+                .id(original.id())
+                .uid(original.uid())
+                .name(updatedAthlete.name())
+                .email(updatedAthlete.email())
+                .status(original.status())
+                .created(original.created())
+                .updated(LocalDateTime.now())
+                .build();
+        return Optional.of(repository.save(result));
+
     }
 
     @Override
-    public Athlete getAthlete(String uid) {
-        return null;
+    public Optional<Athlete> getAthlete(String uid) {
+        return repository.findByUid(uid);
     }
 
     @Override
-    public boolean deleteAthlete(String uid) {
-        return false;
+    public boolean deleteAthlete(Athlete athlete) {
+        repository.delete(athlete);
+        return true;
     }
 
     @Override
     public List<Athlete> getAthletes() {
-        return List.of();
+        var result = new ArrayList<Athlete>();
+        repository.findAll().forEach(result::add);
+        return result;
     }
 
     @Override
-    public boolean blockAthlete(String uid) {
-        return false;
+    public Athlete blockAthlete(Athlete athlete) {
+        return changeAthleteStatus(athlete, AthleteStatus.Blocked);
     }
 
     @Override
-    public boolean unblockAthlete(String uid) {
-        return false;
+    public Athlete unblockAthlete(Athlete athlete) {
+        return activateAthlete(athlete);
     }
 
     @Override
-    public boolean suspendAthlete(String uid) {
-        return false;
+    public Athlete suspendAthlete(Athlete athlete) {
+        return changeAthleteStatus(athlete, AthleteStatus.Suspended);
     }
 
     @Override
-    public boolean resumeAthlete(String uid) {
-        return false;
+    public Athlete resumeAthlete(Athlete athlete) {
+        return activateAthlete(athlete);
     }
 
     @Override
-    public boolean closeAthlete(String uid) {
-        return false;
+    public Athlete closeAthlete(Athlete athlete) {
+        return changeAthleteStatus(athlete, AthleteStatus.Closed);
     }
 
     @Override
-    public boolean activateAthlete(String uid) {
-        return false;
+    public Athlete activateAthlete(Athlete athlete) {
+        return changeAthleteStatus(athlete, AthleteStatus.Active);
+    }
+
+    private Athlete changeAthleteStatus(Athlete athlete, AthleteStatus status) {
+        var updated = Athlete.builder()
+                .id(athlete.id())
+                .uid(athlete.uid())
+                .name(athlete.name())
+                .email(athlete.email())
+                .status(status)
+                .created(athlete.created())
+                .updated(LocalDateTime.now())
+                .build();
+        return repository.save(updated);
     }
 }

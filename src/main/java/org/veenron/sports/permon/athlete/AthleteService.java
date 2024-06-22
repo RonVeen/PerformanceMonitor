@@ -3,21 +3,22 @@ package org.veenron.sports.permon.athlete;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface AthleteService {
 
-    Athlete createAthlete(String name, String email);
-    Athlete updateAthlete(String uid, Athlete updatedAtlete);
-    Athlete getAthlete(String uid);
-    boolean deleteAthlete(String uid);
+    Optional<Athlete> createAthlete(String name, String email);
+    Optional<Athlete> updateAthlete(Athlete original, Athlete updatedAthlete);
+    Optional<Athlete> getAthlete(String uid);
+    boolean deleteAthlete(Athlete athlete);
     List<Athlete> getAthletes();
 
-    boolean blockAthlete(String uid);
-    boolean unblockAthlete(String uid);
-    boolean suspendAthlete(String uid);
-    boolean resumeAthlete(String uid);
-    boolean closeAthlete(String uid);
-    boolean activateAthlete(String uid);
+    Athlete blockAthlete(Athlete athlete);
+    Athlete unblockAthlete(Athlete athlete);
+    Athlete suspendAthlete(Athlete athlete);
+    Athlete resumeAthlete(Athlete athlete);
+    Athlete closeAthlete(Athlete athlete);
+    Athlete activateAthlete(Athlete athlete);
 
 }
