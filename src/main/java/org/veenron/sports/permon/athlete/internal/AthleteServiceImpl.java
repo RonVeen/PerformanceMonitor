@@ -20,10 +20,9 @@ public class AthleteServiceImpl implements AthleteService {
     final AthleteRepository repository;
 
     @Override
-
     public Optional<Athlete> createAthlete(String name, String email) {
         var now = LocalDateTime.now();
-        return Optional.of(repository.save(new Athlete(0, ShortUUID.next(), name, email, AthleteStatus.Pending, now, now)));
+        return Optional.of(repository.save(new Athlete(0, ShortUUID.next(), name, email, AthleteStatus.PENDING, now, now)));
     }
 
     @Override
@@ -61,7 +60,7 @@ public class AthleteServiceImpl implements AthleteService {
 
     @Override
     public Athlete blockAthlete(Athlete athlete) {
-        return changeAthleteStatus(athlete, AthleteStatus.Blocked);
+        return changeAthleteStatus(athlete, AthleteStatus.BLOCKED);
     }
 
     @Override
@@ -71,7 +70,7 @@ public class AthleteServiceImpl implements AthleteService {
 
     @Override
     public Athlete suspendAthlete(Athlete athlete) {
-        return changeAthleteStatus(athlete, AthleteStatus.Suspended);
+        return changeAthleteStatus(athlete, AthleteStatus.SUSPENDED);
     }
 
     @Override
@@ -81,12 +80,12 @@ public class AthleteServiceImpl implements AthleteService {
 
     @Override
     public Athlete closeAthlete(Athlete athlete) {
-        return changeAthleteStatus(athlete, AthleteStatus.Closed);
+        return changeAthleteStatus(athlete, AthleteStatus.CLOSED);
     }
 
     @Override
     public Athlete activateAthlete(Athlete athlete) {
-        return changeAthleteStatus(athlete, AthleteStatus.Active);
+        return changeAthleteStatus(athlete, AthleteStatus.ACTIVE);
     }
 
     private Athlete changeAthleteStatus(Athlete athlete, AthleteStatus status) {

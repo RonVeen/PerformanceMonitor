@@ -1,17 +1,11 @@
 package org.veenron.sports.permon.activity;
 
+import lombok.Builder;
+import org.springframework.data.annotation.Id;
+
 import java.time.LocalDateTime;
 
-enum Status {
-    Active("Active"),
-    Closed("Closed");
-
-    private final String status;
-    Status(String status) {
-        this.status = status;
-    }
-
-}
-public record Activity(int id, String uid, String description, String remarks,
-                       Status status, LocalDateTime created, LocalDateTime closed) {
+@Builder
+public record Activity(@Id int id, String uid, String description, String remarks,
+                       ActivityStatus status, LocalDateTime created, LocalDateTime updated) {
 }

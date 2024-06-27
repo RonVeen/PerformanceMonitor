@@ -1,4 +1,4 @@
-package org.veenron.sports.permon.exercise;
+package org.veenron.sports.permon.forecast;
 
 import org.springframework.stereotype.Service;
 import org.veenron.sports.permon.activity.Activity;
